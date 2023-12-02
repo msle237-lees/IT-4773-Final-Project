@@ -116,6 +116,25 @@ def plot_training_validation_data(df, X_train, y_train, X_test, y_test, title):
     plt.legend()
     plt.show()
 
+def plot_raw_data(df, title='Stock Price Data'):
+    """
+    Plot the raw data of stock prices.
+
+    Args:
+    df (pandas.DataFrame): DataFrame containing the stock data with 'Date' and 'Close' columns.
+    title (str): Title of the plot.
+
+    Returns:
+    None
+    """
+    plt.figure(figsize=(12, 6))
+    plt.plot(df.index, df['Close'], label='Close Price', color='blue')
+    plt.title(title)
+    plt.xlabel('Date')
+    plt.ylabel('Close Price')
+    plt.legend()
+    plt.show()
+
 # File paths for your CSV files
 file_paths = ['db/Stocks/bwen.csv', 'db/Stocks/cclp.csv', 'db/Stocks/iac.csv']
 
@@ -125,6 +144,9 @@ dataframes = {file_path.split('/')[-1].split('.')[0]: read_custom_csv(file_path)
 # Adding custom features, training models, and plotting results
 models_results = {}
 for key, df in dataframes.items():
+    # Plotting raw data for each stock
+    plot_raw_data(df, f"{key.upper()} Stock - Raw Data")
+    
     enhanced_df = add_custom_features(df.copy())
     X_train, X_test, y_train, y_test = prepare_data(enhanced_df, target_col='Close')
     model, rmse = train_evaluate_model(X_train, X_test, y_train, y_test)
